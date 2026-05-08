@@ -1,4 +1,5 @@
 curWords = [];
+curShowedWords = [];
 
 async function loadWords() {
     try {
@@ -30,7 +31,16 @@ class Main {
         this.startScreen = document.getElementById("start-screen");
         this.mainScreen = document.getElementById("main-screen");
         this.resultScreen = document.getElementById("result-screen");
+        this.answerInput = document.getElementById("answer-input");
+        this.answerInput.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                this.onEnter(event);
+            }
+        });
+        this.restartButton = document.getElementById("restart-button");
+        this.restartButton.addEventListener("click", this.onRestartButtonClick.bind(this));
         curWords = [];
+        curShowedWords = [];
     }
 
     onDifficultyChange(event) {
@@ -49,6 +59,11 @@ class Main {
     onStartButtonClick() {
         this.startScreen.classList.remove("active");
         this.mainScreen.classList.add("active");
+    }
+
+    onEnter(event) {
+        console.log("입력된 값:", this.answerInput.value);
+        this.answerInput.value = "";
     }
 
     onGameEnd() {
