@@ -94,6 +94,7 @@ class Main {
 function createWord() {
     const span = document.createElement('span'); // 요소 생성
 
+    let duration = 1;//아직 애니메이션 안넣음
     // 주어진 범위 내 무작위 글자 선택
     let randomIndex = Math.floor(Math.random() * curWords.length);
     while (curShowedWordIndexes.includes(randomIndex)) {
