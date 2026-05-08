@@ -52,7 +52,7 @@ class Main {
             this.wordsList.appendChild(document.createTextNode(`-  ${element.kanji} ${element.jp} (${element.kr.join(", ")})`));
             this.wordsList.appendChild(document.createElement("br"));
         });
-        const wordsCount = Math.min(this.words[selectedDifficulty].length, 50);
+        const wordsCount = Math.min(this.words[selectedDifficulty].length, 20);
         const shuffled = [...this.words[selectedDifficulty]].sort(() => Math.random() - 0.5);
         curWords = shuffled.slice(0, wordsCount);
         document.getElementById("total-count").innerHTML = wordsCount;
