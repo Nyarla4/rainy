@@ -40,6 +40,7 @@ class Main {
         this.restartButton = document.getElementById("restart-button");
         this.restartButton.addEventListener("click", this.onRestartButtonClick.bind(this));
         this.mainArea = document.getElementById("main-area");
+        this.correctCount = document.getElementById("correct-count");
         curWords = [];
         curShowedWordIndexes = [];
     }
@@ -55,12 +56,12 @@ class Main {
         });
         const wordsCount = Math.min(this.words[selectedDifficulty].length, 20);
         const shuffled = [...this.words[selectedDifficulty]].sort(() => Math.random() - 0.5);
-        curWords = shuffled.slice(0, wordsCount);
-        document.getElementById("current-count").innerHTML = 0;
+        curWords = shuffled.slice(0, wordsCount);        
         document.getElementById("total-count").innerHTML = wordsCount;
     }
 
     onStartButtonClick() {
+        this.correctCount.innerHTML = 0;
         this.startScreen.classList.remove("active");
         this.mainScreen.classList.add("active");
     }
@@ -72,8 +73,8 @@ class Main {
             inputWord = curWords.find(f=>f.jp == this.answerInput.value);
         }
         if(inputWord != undefined) {
-            let score = parseInt(document.getElementById("current-count").innerHTML);
-            document.getElementById("current-count").innerHTML = score + 1;
+            let score = parseInt(this.correctCount.innerHTML);
+            this.correctCount.innerHTML = score + 1;
             document.getElementById(inputWord.kanji)?.remove();
         }
         this.answerInput.value = "";
