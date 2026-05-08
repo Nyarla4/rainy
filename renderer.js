@@ -1,5 +1,3 @@
-console.log("테스트");
-
 async function loadWords() {
     try {
         const response = await fetch('./words.json');
@@ -24,12 +22,16 @@ class Main {
         this.words = words;
         this.difficulty = document.getElementById("difficulty");
         this.difficulty.addEventListener("change", this.onDifficultyChange.bind(this));
+        this.wordsList = document.getElementById("words-list");
     }
 
     onDifficultyChange(event) {
         const selectedDifficulty = event.target.value;
         console.log("선택된 난이도:", selectedDifficulty);
-        // 선택된 난이도에 따라 필요한 작업을 수행할 수 있습니다.
+        this.wordsList.appendChild(document.createTextNode(`선택된 난이도: ${selectedDifficulty}`));
+        this.words[selectedDifficulty]?.forEach(element => {
+            this.wordsList.appendChild(document.createTextNode(`- ${element.jp} (${element.kr.join(", ")})`));
+        });
     }
 }
 
