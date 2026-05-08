@@ -53,7 +53,9 @@ class Main {
             this.wordsList.appendChild(document.createElement("br"));
         });
         const wordsCount = Math.min(this.words[selectedDifficulty].length, 50);
-        curWords = this.words[selectedDifficulty].slice(0, wordsCount);
+        const shuffled = [...this.words[selectedDifficulty]].sort(() => Math.random() - 0.5);
+        curWords = shuffled.slice(0, wordsCount);
+        document.getElementById("total-count").innerHTML = wordsCount;
     }
 
     onStartButtonClick() {
