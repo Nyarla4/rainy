@@ -1,6 +1,7 @@
 curWords = [];
 curShowedWordIndexes = [];
 mainArea = document.getElementById("main-area");
+correctCount = document.getElementById("correct-count");
 curInterval = "";
 
 async function loadWords() {
@@ -41,7 +42,6 @@ class Main {
         });
         this.restartButton = document.getElementById("restart-button");
         this.restartButton.addEventListener("click", this.onRestartButtonClick.bind(this));
-        this.correctCount = document.getElementById("correct-count");
         curWords = [];
         curShowedWordIndexes = [];
     }
@@ -62,7 +62,7 @@ class Main {
     }
 
     onStartButtonClick() {
-        this.correctCount.innerHTML = 0;
+        correctCount.innerHTML = 0;
         this.startScreen.classList.remove("active");
         this.mainScreen.classList.add("active");
         curInterval = setInterval(createWord, 300);
@@ -75,9 +75,12 @@ class Main {
             inputWord = curWords.find(f=>f.jp == this.answerInput.value);
         }
         if(inputWord != undefined) {
-            let score = parseInt(this.correctCount.innerHTML);
-            this.correctCount.innerHTML = score + 1;
+            let score = parseInt(correctCount.innerHTML);
+            correctCount.innerHTML = score + 1;
             document.getElementById(inputWord.kanji)?.remove();
+            if (curShowedWordIndexes.length == curWords.length) {
+                onGameEnd();
+            }
         }
         this.answerInput.value = "";
     }
@@ -85,6 +88,7 @@ class Main {
     onGameEnd() {
         this.mainScreen.classList.remove("active");
         this.resultScreen.classList.add("active");
+        document.getElementById("total-score").innerText = correctCount.innerHTML;
     }
 
     onRestartButtonClick() {
@@ -99,7 +103,7 @@ function createWord() {
         return;
     }
 
-    let duration = 10;
+    let duration = 30;
     // 주어진 범위 내 무작위 글자 선택
     let randomIndex = Math.floor(Math.random() * curWords.length);
     while (curShowedWordIndexes.includes(randomIndex)) {
@@ -122,6 +126,9 @@ function createWord() {
     // 애니메이션 시간(duration)이 끝난 뒤에 요소를 삭제함
     setTimeout(() => {
         span.remove();
+        if (curShowedWordIndexes.length == curWords.length) {
+            onGameEnd();
+        }
     }, duration * 1000);
 }
 

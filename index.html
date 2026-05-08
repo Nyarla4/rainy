@@ -9,7 +9,7 @@
 <body>
     <div id="start-screen" class="screen active">
         <h1>시작 화면</h1>
-        <h2>v.0.0.4</h2>
+        <h2>v.0.0.3</h2>
         <div>
             <span>단어 선택</span>
             <select id="difficulty">
@@ -30,7 +30,7 @@
                 정답: <span id="correct-count">0</span>/<span id="total-count">0</span>
             </div>
         </div>
-        <div id="main-area">
+        <div id="main-area" style="height: 90vh">
 
         </div>
         <div id="main-footer">
@@ -40,6 +40,7 @@
 
     <div id="result-screen" class="screen">
         <h1>결과 화면</h1>
+        <span id="total-score"></span>
         <button id="restart-button">다시 시작</button>
     </div>
     <script src="./renderer.js"></script>
