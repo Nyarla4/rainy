@@ -1,3 +1,5 @@
+console.log("테스트");
+
 async function loadWords() {
     try {
         const response = await fetch('./words.json');
