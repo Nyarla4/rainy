@@ -3,6 +3,9 @@ curShowedWordIndexes = [];
 mainArea = document.getElementById("main-area");
 correctCount = document.getElementById("correct-count");
 curInterval = "";
+startScreen = document.getElementById("start-screen");
+mainScreen = document.getElementById("main-screen");
+resultScreen = document.getElementById("result-screen");
 
 async function loadWords() {
     try {
@@ -30,10 +33,7 @@ class Main {
         this.difficulty.addEventListener("change", this.onDifficultyChange.bind(this));
         this.wordsList = document.getElementById("words-list");
         this.startBtn = document.getElementById("start-button");
-        this.startBtn.addEventListener("click", this.onStartButtonClick.bind(this));
-        this.startScreen = document.getElementById("start-screen");
-        this.mainScreen = document.getElementById("main-screen");
-        this.resultScreen = document.getElementById("result-screen");
+        this.startBtn.addEventListener("click", onStartButtonClick.bind(this));
         this.answerInput = document.getElementById("answer-input");
         this.answerInput.addEventListener("keydown", (event) => {
             if (event.key === "Enter") {
@@ -41,7 +41,7 @@ class Main {
             }
         });
         this.restartButton = document.getElementById("restart-button");
-        this.restartButton.addEventListener("click", this.onRestartButtonClick.bind(this));
+        this.restartButton.addEventListener("click", onRestartButtonClick.bind(this));
         curWords = [];
         curShowedWordIndexes = [];
     }
@@ -57,24 +57,17 @@ class Main {
         });
         const wordsCount = Math.min(this.words[selectedDifficulty].length, 20);
         const shuffled = [...this.words[selectedDifficulty]].sort(() => Math.random() - 0.5);
-        curWords = shuffled.slice(0, wordsCount);        
+        curWords = shuffled.slice(0, wordsCount);
         document.getElementById("total-count").innerHTML = wordsCount;
-    }
-
-    onStartButtonClick() {
-        correctCount.innerHTML = 0;
-        this.startScreen.classList.remove("active");
-        this.mainScreen.classList.add("active");
-        curInterval = setInterval(createWord, 300);
     }
 
     onEnter(event) {
         console.log("입력된 값:", this.answerInput.value);
-        let inputWord = curWords.find(f=>f.kr.includes(this.answerInput.value));
-        if(inputWord == undefined) {
-            inputWord = curWords.find(f=>f.jp == this.answerInput.value);
+        let inputWord = curWords.find(f => f.kr.includes(this.answerInput.value));
+        if (inputWord == undefined) {
+            inputWord = curWords.find(f => f.jp == this.answerInput.value);
         }
-        if(inputWord != undefined) {
+        if (inputWord != undefined) {
             let score = parseInt(correctCount.innerHTML);
             correctCount.innerHTML = score + 1;
             document.getElementById(inputWord.kanji)?.remove();
@@ -84,17 +77,24 @@ class Main {
         }
         this.answerInput.value = "";
     }
+}
 
-    onGameEnd() {
-        this.mainScreen.classList.remove("active");
-        this.resultScreen.classList.add("active");
-        document.getElementById("total-score").innerText = correctCount.innerHTML;
-    }
+function onStartButtonClick() {
+    correctCount.innerHTML = 0;
+    startScreen.classList.remove("active");
+    mainScreen.classList.add("active");
+    curInterval = setInterval(createWord, 300);
+}
 
-    onRestartButtonClick() {
-        this.resultScreen.classList.remove("active");
-        this.startScreen.classList.add("active");
-    }
+function onGameEnd() {
+    mainScreen.classList.remove("active");
+    resultScreen.classList.add("active");
+    document.getElementById("total-score").innerText = correctCount.innerHTML;
+}
+
+function onRestartButtonClick() {
+    resultScreen.classList.remove("active");
+    startScreen.classList.add("active");
 }
 
 function createWord() {
