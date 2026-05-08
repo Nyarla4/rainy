@@ -1,3 +1,5 @@
+curWords = [];
+
 async function loadWords() {
     try {
         const response = await fetch('./words.json');
@@ -7,7 +9,7 @@ async function loadWords() {
         }
 
         const words = await response.json();
-        
+
         console.log("데이터 로드 완료:", words);
         new Main(words);
 
@@ -23,11 +25,16 @@ class Main {
         this.difficulty = document.getElementById("difficulty");
         this.difficulty.addEventListener("change", this.onDifficultyChange.bind(this));
         this.wordsList = document.getElementById("words-list");
+        this.startBtn = document.getElementById("start-button");
+        this.startBtn.addEventListener("click", this.onStartButtonClick.bind(this));
+        this.startScreen = document.getElementById("start-screen");
+        this.mainScreen = document.getElementById("main-screen");
+        this.resultScreen = document.getElementById("result-screen");
+        curWords = [];
     }
 
     onDifficultyChange(event) {
         const selectedDifficulty = event.target.value;
-        console.log("선택된 난이도:", selectedDifficulty);
         this.wordsList.innerHTML = "";
         this.wordsList.appendChild(document.createTextNode(`선택된 난이도: ${selectedDifficulty}`));
         this.wordsList.appendChild(document.createElement("br"));
@@ -35,6 +42,23 @@ class Main {
             this.wordsList.appendChild(document.createTextNode(`-  ${element.kanji} ${element.jp} (${element.kr.join(", ")})`));
             this.wordsList.appendChild(document.createElement("br"));
         });
+        const wordsCount = Math.min(this.words[selectedDifficulty].length, 50);
+        curWords = this.words[selectedDifficulty].slice(0, wordsCount);
+    }
+
+    onStartButtonClick() {
+        this.startScreen.classList.remove("active");
+        this.mainScreen.classList.add("active");
+    }
+
+    onGameEnd() {
+        this.mainScreen.classList.remove("active");
+        this.resultScreen.classList.add("active");
+    }
+
+    onRestartButtonClick() {
+        this.resultScreen.classList.remove("active");
+        this.startScreen.classList.add("active");
     }
 }
 
