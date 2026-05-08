@@ -63,7 +63,7 @@ class Main {
     }
 
     onDifficultyChange(event) {
-        difficultyChanged(event.target.value);        
+        this.difficultyChanged(event.target.value);        
     }
 
     onEnter(event) {
