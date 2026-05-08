@@ -1,6 +1,7 @@
 curWords = [];
 curShowedWordIndexes = [];
 mainArea = document.getElementById("main-area");
+curInterval = "";
 
 async function loadWords() {
     try {
@@ -64,6 +65,7 @@ class Main {
         this.correctCount.innerHTML = 0;
         this.startScreen.classList.remove("active");
         this.mainScreen.classList.add("active");
+        curInterval = setInterval(createWord, 300);
     }
 
     onEnter(event) {
@@ -92,16 +94,22 @@ class Main {
 }
 
 function createWord() {
-    const span = document.createElement('span'); // 요소 생성
+    if (curShowedWordIndexes.length == curWords.length) {
+        clearInterval(curInterval);
+        return;
+    }
 
-    let duration = 1;//아직 애니메이션 안넣음
+    let duration = 10;
     // 주어진 범위 내 무작위 글자 선택
     let randomIndex = Math.floor(Math.random() * curWords.length);
     while (curShowedWordIndexes.includes(randomIndex)) {
         randomIndex = Math.floor(Math.random() * curWords.length);
     }
+    const span = document.createElement('span'); // 요소 생성
     span.innerText = curWords[randomIndex].kanji;
     span.id = curWords[randomIndex].kanji;
+    span.classList.add('falling-word');
+    span.style.animationDuration = duration + 's';
     curShowedWordIndexes.push(randomIndex);
 
     // 무작위 X축 위치 (0 ~ 100vw)

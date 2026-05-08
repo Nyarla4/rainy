@@ -5,3 +5,17 @@
 .screen.active{
     display: contents;
 }
+.falling-word {
+    position: absolute;
+    font-size: 20px;
+    white-space: nowrap;
+    user-select: none;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh);
+        /* Fall just past the bottom */
+    }
+}
