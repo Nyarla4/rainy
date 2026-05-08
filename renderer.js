@@ -7,6 +7,7 @@ curInterval = "";
 startScreen = document.getElementById("start-screen");
 mainScreen = document.getElementById("main-screen");
 resultScreen = document.getElementById("result-screen");
+difficulty = document.getElementById("difficulty");
 
 async function loadWords() {
     try {
@@ -19,7 +20,8 @@ async function loadWords() {
         const words = await response.json();
 
         console.log("데이터 로드 완료:", words);
-        new Main(words);
+        const main = new Main(words);
+        main.difficultyChanged(difficulty.value);
 
     } catch (error) {
         console.error("JSON 파일을 불러오는 중 오류 발생:", error);
@@ -30,8 +32,7 @@ async function loadWords() {
 class Main {
     constructor(words) {
         this.words = words;
-        this.difficulty = document.getElementById("difficulty");
-        this.difficulty.addEventListener("change", this.onDifficultyChange.bind(this));
+        difficulty.addEventListener("change", this.onDifficultyChange.bind(this));
         this.wordsList = document.getElementById("words-list");
         this.startBtn = document.getElementById("start-button");
         this.startBtn.addEventListener("click", onStartButtonClick.bind(this));
@@ -44,7 +45,6 @@ class Main {
         this.restartButton = document.getElementById("restart-button");
         this.restartButton.addEventListener("click", onRestartButtonClick.bind(this));
         curWords = [];
-        difficultyChanged(difficulty.value);
     }
 
     difficultyChanged(diff) {
