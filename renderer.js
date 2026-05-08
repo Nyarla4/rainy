@@ -56,6 +56,7 @@ class Main {
         const wordsCount = Math.min(this.words[selectedDifficulty].length, 20);
         const shuffled = [...this.words[selectedDifficulty]].sort(() => Math.random() - 0.5);
         curWords = shuffled.slice(0, wordsCount);
+        document.getElementById("current-count").innerHTML = 0;
         document.getElementById("total-count").innerHTML = wordsCount;
     }
 
@@ -64,32 +65,17 @@ class Main {
         this.mainScreen.classList.add("active");
     }
 
-    createWord() {
-        const span = document.createElement('span'); // 요소 생성
-
-        // 주어진 범위 내 무작위 글자 선택
-        let randomIndex = Math.floor(Math.random() * curWords.length);
-        while (curShowedWordIndexes.includes(randomIndex)) {
-            randomIndex = Math.floor(Math.random() * curWords.length);
-        }
-        span.innerText = curWords[randomIndex];
-        curShowedWordIndexes.push(randomIndex);
-
-        // 무작위 X축 위치 (0 ~ 100vw)
-        const left = Math.random() * 100;
-        span.style.left = left + 'vw';
-
-        this.mainArea.appendChild(span); // 화면에 추가
-
-        // 2. 특정 위치(시간) 도달 시 제거 부분
-        // 애니메이션 시간(duration)이 끝난 뒤에 요소를 삭제함
-        setTimeout(() => {
-            span.remove();
-        }, duration * 1000);
-    }
-
     onEnter(event) {
         console.log("입력된 값:", this.answerInput.value);
+        let inputWord = curWords.find(f=>f.kr.includes(this.answerInput.value));
+        if(inputWord == undefined) {
+            inputWord = curWords.find(f=>f.jp == this.answerInput.value);
+        }
+        if(inputWord != undefined) {
+            let score = parseInt(document.getElementById("current-count").innerHTML);
+            document.getElementById("current-count").innerHTML = score + 1;
+            document.getElementById(inputWord.kanji)?.remove();
+        }
         this.answerInput.value = "";
     }
 
@@ -102,6 +88,31 @@ class Main {
         this.resultScreen.classList.remove("active");
         this.startScreen.classList.add("active");
     }
+}
+
+function createWord() {
+    const span = document.createElement('span'); // 요소 생성
+
+    // 주어진 범위 내 무작위 글자 선택
+    let randomIndex = Math.floor(Math.random() * curWords.length);
+    while (curShowedWordIndexes.includes(randomIndex)) {
+        randomIndex = Math.floor(Math.random() * curWords.length);
+    }
+    span.innerText = curWords[randomIndex].kanji;
+    span.id = curWords[randomIndex].kanji;
+    curShowedWordIndexes.push(randomIndex);
+
+    // 무작위 X축 위치 (0 ~ 100vw)
+    const left = Math.random() * 100;
+    span.style.left = left + 'vw';
+
+    this.mainArea.appendChild(span); // 화면에 추가
+
+    // 2. 특정 위치(시간) 도달 시 제거 부분
+    // 애니메이션 시간(duration)이 끝난 뒤에 요소를 삭제함
+    setTimeout(() => {
+        span.remove();
+    }, duration * 1000);
 }
 
 loadWords();
