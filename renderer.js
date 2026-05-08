@@ -42,8 +42,7 @@ class Main {
         });
         this.restartButton = document.getElementById("restart-button");
         this.restartButton.addEventListener("click", onRestartButtonClick.bind(this));
-        curWords = [];
-        curShowedWordIndexes = [];
+        curWords = [];        
     }
 
     onDifficultyChange(event) {
@@ -80,10 +79,11 @@ class Main {
 }
 
 function onStartButtonClick() {
+    curShowedWordIndexes = [];
     correctCount.innerHTML = 0;
     startScreen.classList.remove("active");
     mainScreen.classList.add("active");
-    curInterval = setInterval(createWord, 300);
+    curInterval = setInterval(createWord, 1000);
 }
 
 function onGameEnd() {
