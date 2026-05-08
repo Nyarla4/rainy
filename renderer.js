@@ -30,10 +30,10 @@ class Main {
         console.log("선택된 난이도:", selectedDifficulty);
         this.wordsList.innerHTML = "";
         this.wordsList.appendChild(document.createTextNode(`선택된 난이도: ${selectedDifficulty}`));
-        this.wordsList.appendChild(document.createTextNode(`</br>`));
+        this.wordsList.appendChild(document.createElement("br"));
         this.words[selectedDifficulty]?.forEach(element => {
             this.wordsList.appendChild(document.createTextNode(`- ${element.jp} (${element.kr.join(", ")})`));
-            this.wordsList.appendChild(document.createTextNode(`</br>`));
+            this.wordsList.appendChild(document.createElement("br"));
         });
     }
 }
