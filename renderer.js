@@ -43,11 +43,12 @@ class Main {
         });
         this.restartButton = document.getElementById("restart-button");
         this.restartButton.addEventListener("click", onRestartButtonClick.bind(this));
-        curWords = [];        
+        curWords = [];
+        difficultyChanged(difficulty.value);
     }
 
-    onDifficultyChange(event) {
-        const selectedDifficulty = event.target.value;
+    difficultyChanged(diff) {
+        const selectedDifficulty = diff;
         this.wordsList.innerHTML = "";
         this.wordsList.appendChild(document.createTextNode(`선택된 난이도: ${selectedDifficulty}`));
         this.wordsList.appendChild(document.createElement("br"));
@@ -59,6 +60,10 @@ class Main {
         const shuffled = [...this.words[selectedDifficulty]].sort(() => Math.random() - 0.5);
         curWords = shuffled.slice(0, wordsCount);
         document.getElementById("total-count").innerHTML = wordsCount;
+    }
+
+    onDifficultyChange(event) {
+        difficultyChanged(event.target.value);        
     }
 
     onEnter(event) {
