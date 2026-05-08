@@ -1,5 +1,6 @@
 curWords = [];
 curShowedWordIndexes = [];
+removedWordsCount = 0;
 mainArea = document.getElementById("main-area");
 correctCount = document.getElementById("correct-count");
 curInterval = "";
@@ -70,7 +71,8 @@ class Main {
             let score = parseInt(correctCount.innerHTML);
             correctCount.innerHTML = score + 1;
             document.getElementById(inputWord.kanji)?.remove();
-            if (curShowedWordIndexes.length == curWords.length) {
+            removedWordsCount++;
+            if (removedWordsCount == curWords.length) {
                 onGameEnd();
             }
         }
@@ -80,6 +82,7 @@ class Main {
 
 function onStartButtonClick() {
     curShowedWordIndexes = [];
+    removedWordsCount = 0;
     correctCount.innerHTML = 0;
     startScreen.classList.remove("active");
     mainScreen.classList.add("active");
@@ -126,7 +129,8 @@ function createWord() {
     // 애니메이션 시간(duration)이 끝난 뒤에 요소를 삭제함
     setTimeout(() => {
         span.remove();
-        if (curShowedWordIndexes.length == curWords.length) {
+        removedWordsCount++;
+        if (removedWordsCount == curWords.length) {
             onGameEnd();
         }
     }, duration * 1000);
