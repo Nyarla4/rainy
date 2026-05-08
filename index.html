@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nn 산성비</title>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+    <div id="start-screen" class="screen active">
+        <h1>시작 화면</h1>
+        <div>
+            <label>단어 선택</label>
+            <select id="difficulty" onchange="(e)=>console.log(e)">
+                <option id="N1">N1</option>
+                <option id="N2">N2</option>
+                <option id="N3">N3</option>
+                <option id="N4">N4</option>
+                <option id="N5">N5</option>
+            </select>
+            <div id="words-list"></div>
+        </div>
+    </div>
+    
+    <div id="main-screen" class="screen">
+        <div id="main-header">
+            <div>
+                정답: <span id="correct-count">0</span>/<span id="total-count">0</span>
+            </div>
+        </div>
+        <div id="main-area">
+
+        </div>
+        <div id="main-footer">
+
+        </div>
+    </div>
+
+    <div id="result-screen" class="screen">
+        <h1>결과 화면</h1>
+    </div>
+    <script src="renderer.js"></script>
+</body>
+</html>
