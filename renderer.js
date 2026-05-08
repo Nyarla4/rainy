@@ -1,5 +1,6 @@
 curWords = [];
 curShowedWordIndexes = [];
+mainArea = document.getElementById("main-area");
 
 async function loadWords() {
     try {
@@ -39,7 +40,6 @@ class Main {
         });
         this.restartButton = document.getElementById("restart-button");
         this.restartButton.addEventListener("click", this.onRestartButtonClick.bind(this));
-        this.mainArea = document.getElementById("main-area");
         this.correctCount = document.getElementById("correct-count");
         curWords = [];
         curShowedWordIndexes = [];
