@@ -68,10 +68,26 @@ class Main {
 
     onEnter(event) {
         console.log("입력된 값:", this.answerInput.value);
-        let inputWord = curWords.find(f => f.kr.includes(this.answerInput.value));
-        if (inputWord == undefined) {
-            inputWord = curWords.find(f => f.jp == this.answerInput.value);
-        }
+        const inputWord = this.answerInput.value;
+        let inputWord = curWords.find(f => {
+            // 1. 한국어 뜻 배열(kr) 중 하나라도 일치하는지 확인
+            const matchKr = f.kr.some(k => {
+                // ① 완전 일치 (예: "(본궤도에서) 벗어나다")
+                if (k === userInput) return true;
+                // ② 괄호만 제거 (예: "본궤도에서 벗어나다")
+                const flatWord = k.replace(/\(|\)/g, "");
+                if (flatWord === userInput) return true;
+                // ③ 괄호와 그 안의 내용까지 제거 (예: "벗어나다")
+                const coreWord = k.replace(/\([^)]*\)/g, "").trim();
+                if (coreWord === userInput) return true;
+                return false;
+            });
+
+            if (matchKr) return true;
+
+            // 2. 일본어 발음(jp) 일치 확인
+            return f.jp === userInput;
+        });
         if (inputWord != undefined) {
             let score = parseInt(correctCount.innerHTML);
             correctCount.innerHTML = score + 1;
