@@ -1,6 +1,6 @@
-.start-screen,
-.main-screen,
-.result-screen{
+#start-screen,
+#main-screen,
+#result-screen{
     text-align: center;
 }
 
