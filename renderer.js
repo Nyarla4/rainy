@@ -50,12 +50,38 @@ class Main {
     difficultyChanged(diff) {
         const selectedDifficulty = diff;
         this.wordsList.innerHTML = "";
-        this.wordsList.appendChild(document.createTextNode(`선택된 난이도: ${selectedDifficulty}`));
-        this.wordsList.appendChild(document.createElement("br"));
-        this.words[selectedDifficulty]?.forEach(element => {
-            this.wordsList.appendChild(document.createTextNode(`-  ${element.kanji} ${element.jp} (${element.kr.join(", ")})`));
-            this.wordsList.appendChild(document.createElement("br"));
+
+        const table = document.createElement("table");
+        const thead = document.createElement("thead");
+        const tbody = document.createElement("tbody");
+
+        const headerRow = document.createElement("tr");
+        ["한자", "발음", "뜻"].forEach(text => {
+            const th = document.createElement("th");
+            th.textContent = text;
+            headerRow.appendChild(th);
         });
+        thead.appendChild(headerRow);
+
+        // 데이터 행 생성 로직
+        this.words[selectedDifficulty]?.forEach(element => {
+            const tr = document.createElement("tr");
+
+            // 각 셀 생성 (구조적 반복)
+            const data = [element.kanji, element.jp, element.kr.join(", ")];
+            data.forEach(text => {
+                const td = document.createElement("td");
+                td.textContent = text;
+                tr.appendChild(td);
+            });
+
+            tbody.appendChild(tr);
+        });
+
+        table.appendChild(thead);
+        table.appendChild(tbody);
+        this.wordsList.appendChild(table);
+        
         const wordsCount = Math.min(this.words[selectedDifficulty].length, 20);
         const shuffled = [...this.words[selectedDifficulty]].sort(() => Math.random() - 0.5);
         curWords = shuffled.slice(0, wordsCount);
