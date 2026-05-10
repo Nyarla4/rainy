@@ -150,6 +150,7 @@ class Main {
                 if (removedWordsCount == curWords.length) {
                     onGameEnd();
                 }
+                targetElement = undefined;
             }
         }
         this.answerInput.value = "";
