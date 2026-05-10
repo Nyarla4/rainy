@@ -186,10 +186,16 @@ function onGameEnd() {
     const thead = document.createElement("thead");
     const tbody = document.createElement("tbody");
 
+    const maxLength = Math.max(...resultWords.map(f=>f.kanji.length));
+    const thWidth = ((maxLength+1)*20)+'vh';
+
     const headerRow = document.createElement("tr");
     ["한자", "발음", "뜻"].forEach(text => {
         const th = document.createElement("th");
         th.textContent = text;
+        if(text == "한자"){
+            th.width = thWidth;
+        }
         headerRow.appendChild(th);
     });
     thead.appendChild(headerRow);
