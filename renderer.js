@@ -94,7 +94,7 @@ class Main {
     }
 
     onSpeedChange(diff) {
-        duration = diff;
+        duration = diff.target.value;
     }
 
     onDifficultyChange(event) {
