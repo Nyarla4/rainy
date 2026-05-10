@@ -1,5 +1,8 @@
+const maxWordCount = 20;
+
 curWords = [];
 curShowedWordIndexes = [];
+wordsCount = 0;
 removedWordsCount = 0;
 mainArea = document.getElementById("main-area");
 correctCount = document.getElementById("correct-count");
@@ -90,7 +93,7 @@ class Main {
         table.appendChild(tbody);
         this.wordsList.appendChild(table);
 
-        const wordsCount = Math.min(this.words[selectedDifficulty].length, 20);
+        wordsCount = Math.min(this.words[selectedDifficulty].length, maxWordCount);
         const shuffled = [...this.words[selectedDifficulty]].sort(() => Math.random() - 0.5);
         curWords = shuffled.slice(0, wordsCount);
         document.getElementsByClassName("total-count")[0].innerHTML = wordsCount;
@@ -179,7 +182,9 @@ function onStartButtonClick() {
 function onGameEnd() {
     mainScreen.classList.remove("active");
     resultScreen.classList.add("active");
-    document.getElementById("total-score").innerText = `${difficulty.value}난이도, ${correctCount.innerHTML}점`;
+    let finalCorrect = parseInt(correctCount.innerHTML);
+    let finalScore = finalCorrect / wordsCount * 100;
+    document.getElementById("total-score").innerText = `난이도: ${difficulty.value}, 속도: ${document.getElementById(duration).innerHTML}, 점수: ${finalScore}(${finalCorrect} / ${wordsCount})`;
     
     resultWordsList.innerHTML = "";
     const table = document.createElement("table");
