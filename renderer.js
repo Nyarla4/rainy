@@ -10,6 +10,8 @@ resultScreen = document.getElementById("result-screen");
 difficulty = document.getElementById("difficulty");
 missedWords = [];
 missedWordsList= document.getElementById("missed-words");
+duration = 30;
+speed = document.getElementById("speed");
 
 async function loadWords() {
     try {
@@ -46,6 +48,7 @@ class Main {
         });
         this.restartButton = document.getElementById("restart-button");
         this.restartButton.addEventListener("click", onRestartButtonClick.bind(this));
+        speed.addEventListener("change", this.onSpeedChange.bind(this));
         curWords = [];
     }
 
@@ -88,6 +91,10 @@ class Main {
         const shuffled = [...this.words[selectedDifficulty]].sort(() => Math.random() - 0.5);
         curWords = shuffled.slice(0, wordsCount);
         document.getElementById("total-count").innerHTML = wordsCount;
+    }
+
+    onSpeedChange(diff) {
+        duration = diff;
     }
 
     onDifficultyChange(event) {
@@ -137,6 +144,7 @@ function onStartButtonClick() {
     correctCount.innerHTML = 0;
     startScreen.classList.remove("active");
     mainScreen.classList.add("active");
+    createWord();
     curInterval = setInterval(createWord, 4000);
 }
 
@@ -174,7 +182,7 @@ function onGameEnd() {
 
     table.appendChild(thead);
     table.appendChild(tbody);
-    this.wordsList.appendChild(table);
+    missedWordsList.appendChild(table);
 }
 
 function onRestartButtonClick() {
@@ -188,7 +196,6 @@ function createWord() {
         return;
     }
 
-    let duration = 30;
     // 주어진 범위 내 무작위 글자 선택
     let randomIndex = Math.floor(Math.random() * curWords.length);
     while (curShowedWordIndexes.includes(randomIndex)) {
@@ -211,7 +218,7 @@ function createWord() {
     // 애니메이션 시간(duration)이 끝난 뒤에 요소를 삭제함
     setTimeout(() => {
         span.remove();
-        missedWords.add(curWords.find(f=>f.kanji == span.id));
+        missedWords.push(curWords.find(f=>f.kanji == span.id));
         removedWordsCount++;
         if (removedWordsCount == curWords.length) {
             onGameEnd();
