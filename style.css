@@ -27,3 +27,7 @@
         /* Fall just past the bottom */
     }
 }
+
+table {
+    margin: auto;
+}
