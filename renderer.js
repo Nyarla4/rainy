@@ -256,7 +256,7 @@ function createWord() {
     // 애니메이션 시간(duration)이 끝난 뒤에 요소를 삭제함
     setTimeout(() => {
         var originWord = curWords.find(f => f.kanji == span.id);
-        if (resultWords.find(f => f.kanji == originWord.kanji) != undefined) {
+        if (resultWords.find(f => f.kanji == originWord.kanji) == undefined) {
             span.remove();
             let score = parseInt(wrongCount.innerHTML);
             wrongCount.innerHTML = score + 1;
