@@ -170,39 +170,39 @@ function onGameEnd() {
     mainScreen.classList.remove("active");
     resultScreen.classList.add("active");
     document.getElementById("total-score").innerText = correctCount.innerHTML;
-    if (correctCount < curWords.length) {
-        missedWordsList.innerHTML = "";
-        const table = document.createElement("table");
-        const thead = document.createElement("thead");
-        const tbody = document.createElement("tbody");
+    
+    missedWordsList.innerHTML = "";
+    const missTable = document.createElement("table");
+    const missThead = document.createElement("thead");
+    const missTbody = document.createElement("tbody");
 
-        const headerRow = document.createElement("tr");
-        ["한자", "발음", "뜻"].forEach(text => {
-            const th = document.createElement("th");
-            th.textContent = text;
-            headerRow.appendChild(th);
-        });
-        thead.appendChild(headerRow);
+    const headerRow = document.createElement("tr");
+    ["한자", "발음", "뜻"].forEach(text => {
+        const th = document.createElement("th");
+        th.textContent = text;
+        headerRow.appendChild(th);
+    });
+    missThead.appendChild(headerRow);
 
-        // 데이터 행 생성 로직
-        this.missedWords?.forEach(element => {
-            const tr = document.createElement("tr");
+    // 데이터 행 생성 로직
+    this.missedWords?.forEach(element => {
+        const tr = document.createElement("tr");
 
-            // 각 셀 생성 (구조적 반복)
-            const data = [element.kanji, element.jp, element.kr.join(", ")];
-            data.forEach(text => {
-                const td = document.createElement("td");
-                td.textContent = text;
-                tr.appendChild(td);
-            });
-
-            tbody.appendChild(tr);
+        // 각 셀 생성 (구조적 반복)
+        const data = [element.kanji, element.jp, element.kr.join(", ")];
+        data.forEach(text => {
+            const td = document.createElement("td");
+            td.textContent = text;
+            tr.appendChild(td);
         });
 
-        table.appendChild(thead);
-        table.appendChild(tbody);
-        missedWordsList.appendChild(table);
-    }
+        missTbody.appendChild(tr);
+    });
+
+    missTable.appendChild(missThead);
+    missTable.appendChild(missTbody);
+    missedWordsList.appendChild(missTable);
+    
     correctWordsList.innerHTML = "";
     const table = document.createElement("table");
     const thead = document.createElement("thead");
