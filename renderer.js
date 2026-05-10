@@ -137,16 +137,19 @@ class Main {
             return f.jp === userInput;
         });
         if (inputWord != undefined) {
-            let score = parseInt(correctCount.innerHTML);
-            correctCount.innerHTML = score + 1;
-            let word = inputWord;
-            word.isKr = isKr;
-            word.isCorrect = true;
-            resultWords.push(word);
-            document.getElementById(inputWord.kanji)?.remove();
-            removedWordsCount++;
-            if (removedWordsCount == curWords.length) {
-                onGameEnd();
+            let targetElement = document.getElementById(inputWord.kanji);
+            if(targetElement != null) {
+                let score = parseInt(correctCount.innerHTML);
+                correctCount.innerHTML = score + 1;
+                let word = inputWord;
+                word.isKr = isKr;
+                word.isCorrect = true;
+                resultWords.push(word);
+                targetElement.remove();
+                removedWordsCount++;
+                if (removedWordsCount == curWords.length) {
+                    onGameEnd();
+                }
             }
         }
         this.answerInput.value = "";
@@ -232,7 +235,7 @@ function createWord() {
     }
 
     let randomIndex = indexList.pop();
-    
+
     const span = document.createElement('span'); // 요소 생성
     span.innerText = curWords[randomIndex].kanji;
     span.id = curWords[randomIndex].kanji;
