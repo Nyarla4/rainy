@@ -10,8 +10,11 @@ resultScreen = document.getElementById("result-screen");
 difficulty = document.getElementById("difficulty");
 missedWords = [];
 missedWordsList= document.getElementById("missed-words");
+correctWordsList= document.getElementById("correct-words");
 duration = 30;
+timeTerm = 4000;
 speed = document.getElementById("speed");
+correctWords = [];
 
 async function loadWords() {
     try {
@@ -95,6 +98,7 @@ class Main {
 
     onSpeedChange(diff) {
         duration = diff.target.value;
+        timeTerm = duration / 30 * 4000;
     }
 
     onDifficultyChange(event) {
@@ -104,18 +108,28 @@ class Main {
     onEnter(event) {
         console.log("입력된 값:", this.answerInput.value);
         const userInput = this.answerInput.value.trim();
+        let isKr = false;
         let inputWord = curWords.find(f => {
             // 1. 한국어 뜻 배열(kr) 중 하나라도 일치하는지 확인
             const matchKr = f.kr.some(k => {
                 const trimedK = k.trim();
                 // ① 완전 일치 (예: "(본궤도에서) 벗어나다")
-                if (trimedK === userInput) return true;
+                if (trimedK === userInput) {
+                    isKr = true;
+                    return true;
+                }
                 // ② 괄호만 제거 (예: "본궤도에서 벗어나다")
                 const flatWord = trimedK.replace(/\(|\)/g, "");
-                if (flatWord === userInput) return true;
+                if (flatWord === userInput) {
+                    isKr = true;
+                    return true;
+                }
                 // ③ 괄호와 그 안의 내용까지 제거 (예: "벗어나다")
                 const coreWord = trimedK.replace(/\([^)]*\)/g, "").trim();
-                if (coreWord === userInput) return true;
+                if (coreWord === userInput) {
+                    isKr = true;
+                    return true;
+                }
                 return false;
             });
 
@@ -127,6 +141,9 @@ class Main {
         if (inputWord != undefined) {
             let score = parseInt(correctCount.innerHTML);
             correctCount.innerHTML = score + 1;
+            let word = inputWord;
+            word.isKr = isKr;
+            correctWords.push(word);
             document.getElementById(inputWord.kanji)?.remove();
             removedWordsCount++;
             if (removedWordsCount == curWords.length) {
@@ -140,19 +157,53 @@ class Main {
 function onStartButtonClick() {
     curShowedWordIndexes = [];
     missedWords = [];
+    correctWords = [];
     removedWordsCount = 0;
     correctCount.innerHTML = 0;
     startScreen.classList.remove("active");
     mainScreen.classList.add("active");
     createWord();
-    curInterval = setInterval(createWord, 4000);
+    curInterval = setInterval(createWord, timeTerm);
 }
 
 function onGameEnd() {
     mainScreen.classList.remove("active");
     resultScreen.classList.add("active");
     document.getElementById("total-score").innerText = correctCount.innerHTML;
-    missedWordsList.innerHTML = "";
+    if (correctCount < curWords.length) {
+        missedWordsList.innerHTML = "";
+        const table = document.createElement("table");
+        const thead = document.createElement("thead");
+        const tbody = document.createElement("tbody");
+
+        const headerRow = document.createElement("tr");
+        ["한자", "발음", "뜻"].forEach(text => {
+            const th = document.createElement("th");
+            th.textContent = text;
+            headerRow.appendChild(th);
+        });
+        thead.appendChild(headerRow);
+
+        // 데이터 행 생성 로직
+        this.missedWords?.forEach(element => {
+            const tr = document.createElement("tr");
+
+            // 각 셀 생성 (구조적 반복)
+            const data = [element.kanji, element.jp, element.kr.join(", ")];
+            data.forEach(text => {
+                const td = document.createElement("td");
+                td.textContent = text;
+                tr.appendChild(td);
+            });
+
+            tbody.appendChild(tr);
+        });
+
+        table.appendChild(thead);
+        table.appendChild(tbody);
+        missedWordsList.appendChild(table);
+    }
+    correctWordsList.innerHTML = "";
     const table = document.createElement("table");
     const thead = document.createElement("thead");
     const tbody = document.createElement("tbody");
@@ -166,7 +217,7 @@ function onGameEnd() {
     thead.appendChild(headerRow);
 
     // 데이터 행 생성 로직
-    this.missedWords?.forEach(element => {
+    correctWords?.forEach(element => {
         const tr = document.createElement("tr");
 
         // 각 셀 생성 (구조적 반복)
@@ -174,6 +225,10 @@ function onGameEnd() {
         data.forEach(text => {
             const td = document.createElement("td");
             td.textContent = text;
+            if ((element.isKr && text == element.kr.join(", ")) // 뜻으로 맞춘 경우
+                || (!element.isKr && text == element.jp)) { // 발음으로 맞춘 경우
+                td.style.color = 'green';
+            }
             tr.appendChild(td);
         });
 
@@ -182,7 +237,7 @@ function onGameEnd() {
 
     table.appendChild(thead);
     table.appendChild(tbody);
-    missedWordsList.appendChild(table);
+    correctWordsList.appendChild(table);
 }
 
 function onRestartButtonClick() {
