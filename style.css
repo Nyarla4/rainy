@@ -1,14 +1,14 @@
 #start-screen,
 #main-screen,
-#result-screen{
+#result-screen {
     text-align: center;
 }
 
-.screen{
+.screen {
     display: none;
 }
 
-.screen.active{
+.screen.active {
     display: contents;
 }
 
@@ -30,9 +30,20 @@
 
 table {
     margin: auto;
+    margin-top: 10px;
 }
 
-table,th,td {
+table,
+th,
+td {
     border: 1px solid black;
     border-collapse: collapse;
+}
+
+#result-words td {
+    font-size: 2vh;
+}
+
+#result-words {
+    min-height: 4vh;
 }

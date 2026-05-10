@@ -8,13 +8,11 @@ startScreen = document.getElementById("start-screen");
 mainScreen = document.getElementById("main-screen");
 resultScreen = document.getElementById("result-screen");
 difficulty = document.getElementById("difficulty");
-missedWords = [];
-missedWordsList= document.getElementById("missed-words");
-correctWordsList= document.getElementById("correct-words");
+resultWords = [];
+resultWordsList= document.getElementById("result-words");
 duration = 30;
 timeTerm = 4000;
 speed = document.getElementById("speed");
-correctWords = [];
 
 async function loadWords() {
     try {
@@ -143,7 +141,8 @@ class Main {
             correctCount.innerHTML = score + 1;
             let word = inputWord;
             word.isKr = isKr;
-            correctWords.push(word);
+            word.isCorrect = true;
+            resultWords.push(word);
             document.getElementById(inputWord.kanji)?.remove();
             removedWordsCount++;
             if (removedWordsCount == curWords.length) {
@@ -156,8 +155,7 @@ class Main {
 
 function onStartButtonClick() {
     curShowedWordIndexes = [];
-    missedWords = [];
-    correctWords = [];
+    resultWords = [];
     removedWordsCount = 0;
     correctCount.innerHTML = 0;
     startScreen.classList.remove("active");
@@ -171,39 +169,7 @@ function onGameEnd() {
     resultScreen.classList.add("active");
     document.getElementById("total-score").innerText = correctCount.innerHTML;
     
-    missedWordsList.innerHTML = "";
-    const missTable = document.createElement("table");
-    const missThead = document.createElement("thead");
-    const missTbody = document.createElement("tbody");
-
-    const missHeaderRow = document.createElement("tr");
-    ["한자", "발음", "뜻"].forEach(text => {
-        const th = document.createElement("th");
-        th.textContent = text;
-        missHeaderRow.appendChild(th);
-    });
-    missThead.appendChild(missHeaderRow);
-
-    // 데이터 행 생성 로직
-    this.missedWords?.forEach(element => {
-        const tr = document.createElement("tr");
-
-        // 각 셀 생성 (구조적 반복)
-        const data = [element.kanji, element.jp, element.kr.join(", ")];
-        data.forEach(text => {
-            const td = document.createElement("td");
-            td.textContent = text;
-            tr.appendChild(td);
-        });
-
-        missTbody.appendChild(tr);
-    });
-
-    missTable.appendChild(missThead);
-    missTable.appendChild(missTbody);
-    missedWordsList.appendChild(missTable);
-    
-    correctWordsList.innerHTML = "";
+    resultWordsList.innerHTML = "";
     const table = document.createElement("table");
     const thead = document.createElement("thead");
     const tbody = document.createElement("tbody");
@@ -217,7 +183,7 @@ function onGameEnd() {
     thead.appendChild(headerRow);
 
     // 데이터 행 생성 로직
-    correctWords?.forEach(element => {
+    resultWords?.forEach(element => {
         const tr = document.createElement("tr");
 
         // 각 셀 생성 (구조적 반복)
@@ -225,8 +191,16 @@ function onGameEnd() {
         data.forEach(text => {
             const td = document.createElement("td");
             td.textContent = text;
-            if ((element.isKr && text == element.kr.join(", ")) // 뜻으로 맞춘 경우
-                || (!element.isKr && text == element.jp)) { // 발음으로 맞춘 경우
+            if(element.kanji == text){
+                if(element.isCorrect){
+                    td.style.color = 'green';
+                }
+                else{
+                    td.style.color = 'red';
+                }
+            }
+            else if ((element.isCorrect && element.isKr && text == element.kr.join(", ")) // 뜻으로 맞춘 경우
+                || (element.isCorrect && !element.isKr && text == element.jp)) { // 발음으로 맞춘 경우
                 td.style.color = 'green';
             }
             tr.appendChild(td);
@@ -237,7 +211,7 @@ function onGameEnd() {
 
     table.appendChild(thead);
     table.appendChild(tbody);
-    correctWordsList.appendChild(table);
+    resultWordsList.appendChild(table);
 }
 
 function onRestartButtonClick() {
@@ -273,7 +247,10 @@ function createWord() {
     // 애니메이션 시간(duration)이 끝난 뒤에 요소를 삭제함
     setTimeout(() => {
         span.remove();
-        missedWords.push(curWords.find(f=>f.kanji == span.id));
+        var originWord = curWords.find(f=>f.kanji == span.id);
+        let word = originWord;
+        word.isCorrect = false;
+        resultWords.push(word);
         removedWordsCount++;
         if (removedWordsCount == curWords.length) {
             onGameEnd();
