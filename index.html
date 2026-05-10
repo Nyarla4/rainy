@@ -9,7 +9,7 @@
 <body>
     <div id="start-screen" class="screen active">
         <h1>시작 화면</h1>
-        <h2>v.0.0.10</h2>
+        <h2>v.0.0.11</h2>
         <div>
             <span>단어 선택</span>
             <select id="difficulty">
@@ -21,11 +21,9 @@
             </select>
             <span>속도 선택</span>
             <select id="speed">
-                <option id="5">5</option>
-                <option id="10">10</option>
-                <option id="20">20</option>
-                <option id="30" selected>30</option>
-                <option id="50">50</option>
+                <option id="5" value="5">빠름</option>
+                <option id="30" value="30" selected>보통</option>
+                <option id="50" value="50">느림</option>
             </select>
             <button id="start-button">시작</button>
             <div id="words-list"></div>

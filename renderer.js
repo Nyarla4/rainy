@@ -179,7 +179,7 @@ function onStartButtonClick() {
 function onGameEnd() {
     mainScreen.classList.remove("active");
     resultScreen.classList.add("active");
-    document.getElementById("total-score").innerText = correctCount.innerHTML;
+    document.getElementById("total-score").innerText = `${difficulty.value}난이도, ${correctCount.innerHTML}점`;
     
     resultWordsList.innerHTML = "";
     const table = document.createElement("table");
