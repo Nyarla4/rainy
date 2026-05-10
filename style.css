@@ -44,6 +44,6 @@ td {
     font-size: 2vh;
 }
 
-#result-words {
+#result-words * {
     min-height: 4vh;
 }
