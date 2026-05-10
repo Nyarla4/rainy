@@ -13,6 +13,7 @@ resultWordsList= document.getElementById("result-words");
 duration = 30;
 timeTerm = 4000;
 speed = document.getElementById("speed");
+indexList = [];
 
 async function loadWords() {
     try {
@@ -163,6 +164,11 @@ function onStartButtonClick() {
     correctCount.innerHTML = 0;
     startScreen.classList.remove("active");
     mainScreen.classList.add("active");
+    indexList = Array.from({ length: curWords.length }, (_, i) => i);
+    for (let i = indexList.length -1; i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [indexList[i],indexList[j]]=[indexList[j],indexList[i]];
+    }
     createWord();
     curInterval = setInterval(createWord, timeTerm);
 }
@@ -226,12 +232,6 @@ function createWord() {
     if (curShowedWordIndexes.length == curWords.length) {
         clearInterval(curInterval);
         return;
-    }
-
-    let indexList = Array.from({ length: curWords.length }, (_, i) => i);
-    for (let i = indexList.length -1; i>0;i--){
-        const j = Math.floor(Math.random()*(i+1));
-        [indexList[i],indexList[j]]=[indexList[j],indexList[i]];
     }
 
     let randomIndex = indexList.pop();
