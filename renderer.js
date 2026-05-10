@@ -255,11 +255,11 @@ function createWord() {
     // 2. 특정 위치(시간) 도달 시 제거 부분
     // 애니메이션 시간(duration)이 끝난 뒤에 요소를 삭제함
     setTimeout(() => {
-        if (span != undefined) {
+        var originWord = curWords.find(f => f.kanji == span.id);
+        if (resultWords.find(f => f.kanji == originWord.kanji) != undefined) {
             span.remove();
             let score = parseInt(wrongCount.innerHTML);
             wrongCount.innerHTML = score + 1;
-            var originWord = curWords.find(f => f.kanji == span.id);
             let word = originWord;
             resultWords.push(word);
             removedWordsCount++;
