@@ -3,6 +3,7 @@ curShowedWordIndexes = [];
 removedWordsCount = 0;
 mainArea = document.getElementById("main-area");
 correctCount = document.getElementById("correct-count");
+wrongCount = document.getElementById("wrong-count");
 curInterval = "";
 startScreen = document.getElementById("start-screen");
 mainScreen = document.getElementById("main-screen");
@@ -92,7 +93,8 @@ class Main {
         const wordsCount = Math.min(this.words[selectedDifficulty].length, 20);
         const shuffled = [...this.words[selectedDifficulty]].sort(() => Math.random() - 0.5);
         curWords = shuffled.slice(0, wordsCount);
-        document.getElementById("total-count").innerHTML = wordsCount;
+        document.getElementsByClassName("total-count")[0].innerHTML = wordsCount;
+        document.getElementsByClassName("total-count")[1].innerHTML = wordsCount;
     }
 
     onSpeedChange(diff) {
@@ -162,6 +164,7 @@ function onStartButtonClick() {
     resultWords = [];
     removedWordsCount = 0;
     correctCount.innerHTML = 0;
+    wrongCount.innerHTML = 0;
     startScreen.classList.remove("active");
     mainScreen.classList.add("active");
     indexList = Array.from({ length: curWords.length }, (_, i) => i);
@@ -254,6 +257,8 @@ function createWord() {
     setTimeout(() => {
         if (span != undefined) {
             span.remove();
+            let score = parseInt(wrongCount.innerHTML);
+            wrongCount.innerHTML = score + 1;
             var originWord = curWords.find(f => f.kanji == span.id);
             let word = originWord;
             resultWords.push(word);
