@@ -8,6 +8,8 @@ startScreen = document.getElementById("start-screen");
 mainScreen = document.getElementById("main-screen");
 resultScreen = document.getElementById("result-screen");
 difficulty = document.getElementById("difficulty");
+missedWords = [];
+missedWordsList= document.getElementById("missed-words");
 
 async function loadWords() {
     try {
@@ -130,17 +132,49 @@ class Main {
 
 function onStartButtonClick() {
     curShowedWordIndexes = [];
+    missedWords = [];
     removedWordsCount = 0;
     correctCount.innerHTML = 0;
     startScreen.classList.remove("active");
     mainScreen.classList.add("active");
-    curInterval = setInterval(createWord, 1000);
+    curInterval = setInterval(createWord, 4000);
 }
 
 function onGameEnd() {
     mainScreen.classList.remove("active");
     resultScreen.classList.add("active");
     document.getElementById("total-score").innerText = correctCount.innerHTML;
+    missedWordsList.innerHTML = "";
+    const table = document.createElement("table");
+    const thead = document.createElement("thead");
+    const tbody = document.createElement("tbody");
+
+    const headerRow = document.createElement("tr");
+    ["한자", "발음", "뜻"].forEach(text => {
+        const th = document.createElement("th");
+        th.textContent = text;
+        headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+
+    // 데이터 행 생성 로직
+    this.missedWords?.forEach(element => {
+        const tr = document.createElement("tr");
+
+        // 각 셀 생성 (구조적 반복)
+        const data = [element.kanji, element.jp, element.kr.join(", ")];
+        data.forEach(text => {
+            const td = document.createElement("td");
+            td.textContent = text;
+            tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+    });
+
+    table.appendChild(thead);
+    table.appendChild(tbody);
+    this.wordsList.appendChild(table);
 }
 
 function onRestartButtonClick() {
@@ -167,16 +201,17 @@ function createWord() {
     span.style.animationDuration = duration + 's';
     curShowedWordIndexes.push(randomIndex);
 
-    // 무작위 X축 위치 (0 ~ 100vw)
+    // 무작위 X축 위치 (25 ~ 75vw)
     const left = Math.random() * 50 + 25;
     span.style.left = left + 'vw';
-    
+
     this.mainArea.appendChild(span); // 화면에 추가
 
     // 2. 특정 위치(시간) 도달 시 제거 부분
     // 애니메이션 시간(duration)이 끝난 뒤에 요소를 삭제함
     setTimeout(() => {
         span.remove();
+        missedWords.add(curWords.find(f=>f.kanji == span.id));
         removedWordsCount++;
         if (removedWordsCount == curWords.length) {
             onGameEnd();

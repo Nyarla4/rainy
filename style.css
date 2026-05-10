@@ -17,7 +17,7 @@
 
 @keyframes fall {
     to {
-        transform: translateY(90vh);
+        transform: translateY(80vh);
         /* Fall just past the bottom */
     }
 }
