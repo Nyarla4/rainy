@@ -144,7 +144,6 @@ class Main {
                 correctCount.innerHTML = score + 1;
                 let word = inputWord;
                 word.isKr = isKr;
-                word.isCorrect = true;
                 resultWords.push(word);
                 targetElement.remove();
                 removedWordsCount++;
@@ -201,15 +200,15 @@ function onGameEnd() {
             const td = document.createElement("td");
             td.textContent = text;
             if(element.kanji == text){
-                if(element.isCorrect){
+                if (element.isKr != undefined) {
                     td.style.color = 'green';
                 }
                 else{
                     td.style.color = 'red';
                 }
             }
-            else if ((element.isCorrect && element.isKr && text == element.kr.join(", ")) // 뜻으로 맞춘 경우
-                || (element.isCorrect && !element.isKr && text == element.jp)) { // 발음으로 맞춘 경우
+            else if ((element.isKr && text == element.kr.join(", ")) // 뜻으로 맞춘 경우
+                || (!element.isKr && text == element.jp)) { // 발음으로 맞춘 경우
                 td.style.color = 'green';
             }
             tr.appendChild(td);
@@ -256,7 +255,6 @@ function createWord() {
             span.remove();
             var originWord = curWords.find(f => f.kanji == span.id);
             let word = originWord;
-            word.isCorrect = false;
             resultWords.push(word);
             removedWordsCount++;
             if (removedWordsCount == curWords.length) {
