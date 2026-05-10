@@ -81,7 +81,7 @@ class Main {
         table.appendChild(thead);
         table.appendChild(tbody);
         this.wordsList.appendChild(table);
-        
+
         const wordsCount = Math.min(this.words[selectedDifficulty].length, 20);
         const shuffled = [...this.words[selectedDifficulty]].sort(() => Math.random() - 0.5);
         curWords = shuffled.slice(0, wordsCount);
@@ -168,9 +168,9 @@ function createWord() {
     curShowedWordIndexes.push(randomIndex);
 
     // 무작위 X축 위치 (0 ~ 100vw)
-    const left = Math.random() * 100;
+    const left = Math.random() * 50 + 25;
     span.style.left = left + 'vw';
-
+    
     this.mainArea.appendChild(span); // 화면에 추가
 
     // 2. 특정 위치(시간) 도달 시 제거 부분

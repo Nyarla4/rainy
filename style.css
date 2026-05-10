@@ -12,11 +12,12 @@
     white-space: nowrap;
     user-select: none;
     animation: fall linear forwards;
+    font-size: 3vh;
 }
 
 @keyframes fall {
     to {
-        transform: translateY(80vh);
+        transform: translateY(90vh);
         /* Fall just past the bottom */
     }
 }
