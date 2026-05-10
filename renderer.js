@@ -225,11 +225,14 @@ function createWord() {
         return;
     }
 
-    // 주어진 범위 내 무작위 글자 선택
-    let randomIndex = Math.floor(Math.random() * curWords.length);
-    while (curShowedWordIndexes.includes(randomIndex)) {
-        randomIndex = Math.floor(Math.random() * curWords.length);
+    let indexList = Array.from({ length: curWords.length }, (_, i) => i);
+    for (let i = indexList.length -1; i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [indexList[i],indexList[j]]=[indexList[j],indexList[i]];
     }
+
+    let randomIndex = indexList.pop();
+    
     const span = document.createElement('span'); // 요소 생성
     span.innerText = curWords[randomIndex].kanji;
     span.id = curWords[randomIndex].kanji;
