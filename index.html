@@ -9,7 +9,7 @@
 <body>
     <div id="start-screen" class="screen active">
         <h1>시작 화면</h1>
-        <h2>v.0.0.9</h2>
+        <h2>v.0.0.10</h2>
         <div>
             <span>단어 선택</span>
             <select id="difficulty">
@@ -24,7 +24,7 @@
                 <option id="5">5</option>
                 <option id="10">10</option>
                 <option id="20">20</option>
-                <option id="30">30</option>
+                <option id="30" selected>30</option>
                 <option id="50">50</option>
             </select>
             <button id="start-button">시작</button>
@@ -52,8 +52,10 @@
             <span id="total-score"></span>
             <button id="restart-button">다시 시작</button>
         </div>
-        <div id="missed-words"></div>
-        <div id="correct-words"></div>
+        <div>
+            <div id="missed-words" style="display:inline-block;"></div>
+            <div id="correct-words" style="display:inline-block;"></div>
+        </div>
     </div>
     <script src="./renderer.js"></script>
 </body>
