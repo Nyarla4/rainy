@@ -1,3 +1,9 @@
+.start-screen,
+.main-screen,
+.result-screen{
+    text-align: center;
+}
+
 .screen{
     display: none;
 }
