@@ -139,7 +139,7 @@ class Main {
         });
         if (inputWord != undefined) {
             let targetElement = document.getElementById(inputWord.kanji);
-            if(targetElement != null) {
+            if(targetElement != undefined) {
                 let score = parseInt(correctCount.innerHTML);
                 correctCount.innerHTML = score + 1;
                 let word = inputWord;
@@ -252,14 +252,16 @@ function createWord() {
     // 2. 특정 위치(시간) 도달 시 제거 부분
     // 애니메이션 시간(duration)이 끝난 뒤에 요소를 삭제함
     setTimeout(() => {
-        span.remove();
-        var originWord = curWords.find(f=>f.kanji == span.id);
-        let word = originWord;
-        word.isCorrect = false;
-        resultWords.push(word);
-        removedWordsCount++;
-        if (removedWordsCount == curWords.length) {
-            onGameEnd();
+        if (span != undefined) {
+            span.remove();
+            var originWord = curWords.find(f => f.kanji == span.id);
+            let word = originWord;
+            word.isCorrect = false;
+            resultWords.push(word);
+            removedWordsCount++;
+            if (removedWordsCount == curWords.length) {
+                onGameEnd();
+            }
         }
     }, duration * 1000);
 }
