@@ -176,13 +176,13 @@ function onGameEnd() {
     const missThead = document.createElement("thead");
     const missTbody = document.createElement("tbody");
 
-    const headerRow = document.createElement("tr");
+    const missHeaderRow = document.createElement("tr");
     ["한자", "발음", "뜻"].forEach(text => {
         const th = document.createElement("th");
         th.textContent = text;
-        headerRow.appendChild(th);
+        missHeaderRow.appendChild(th);
     });
-    missThead.appendChild(headerRow);
+    missThead.appendChild(missHeaderRow);
 
     // 데이터 행 생성 로직
     this.missedWords?.forEach(element => {
