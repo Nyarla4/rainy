@@ -5,6 +5,7 @@
 .screen.active{
     display: contents;
 }
+
 .falling-word {
     position: absolute;
     font-size: 20px;
@@ -15,7 +16,7 @@
 
 @keyframes fall {
     to {
-        transform: translateY(100vh);
+        transform: translateY(80vh);
         /* Fall just past the bottom */
     }
 }
