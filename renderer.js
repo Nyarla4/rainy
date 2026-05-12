@@ -114,10 +114,7 @@ class Main {
             if(targetElement != undefined) {
                 let score = parseInt(correctCount.innerHTML);
                 correctCount.innerHTML = score + 1;
-                let word;
-                word.kanji = inputWord.kanji;
-                word.jp = inputWord.jp;
-                word.kr = inputWord.kr;
+                let word = Object.assign({}, inputWord);
                 word.isKr = isKr;
                 resultWords.push(word);
                 targetElement.remove();
@@ -202,7 +199,7 @@ function createWord() {
             span.remove();
             let score = parseInt(wrongCount.innerHTML);
             wrongCount.innerHTML = score + 1;
-            let word = originWord;
+            let word = Object.assign({}, originWord);
             word.isRemoved = true;
             resultWords.push(word);
             removedWordsCount++;
