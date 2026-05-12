@@ -1,6 +1,7 @@
 const maxWordCount = 20;
 
 curWords = [];
+curDiffWords = [];
 curShowedWordIndexes = [];
 wordsCount = 0;
 removedWordsCount = 0;
@@ -60,15 +61,10 @@ class Main {
 
     difficultyChanged(diff) {
         const selectedDifficulty = diff;
-        const curDiffWords = this.words[selectedDifficulty];
+        curDiffWords = this.words[selectedDifficulty];
         
         createListHeader(this.wordsList, curDiffWords);
-
-        wordsCount = Math.min(curDiffWords.length, maxWordCount);
-        const shuffled = [...curDiffWords].sort(() => Math.random() - 0.5);
-        curWords = shuffled.slice(0, wordsCount);
-        document.getElementsByClassName("total-count")[0].innerHTML = wordsCount;
-        document.getElementsByClassName("total-count")[1].innerHTML = wordsCount;
+        setCurWords();
     }
 
     onSpeedChange(diff) {
@@ -118,7 +114,10 @@ class Main {
             if(targetElement != undefined) {
                 let score = parseInt(correctCount.innerHTML);
                 correctCount.innerHTML = score + 1;
-                let word = inputWord;
+                let word;
+                word.kanji = inputWord.kanji;
+                word.jp = inputWord.jp;
+                word.kr = inputWord.kr;
                 word.isKr = isKr;
                 resultWords.push(word);
                 targetElement.remove();
@@ -150,6 +149,14 @@ function onStartButtonClick() {
     curInterval = setInterval(createWord, timeTerm);
 }
 
+function setCurWords() {
+    wordsCount = Math.min(curDiffWords.length, maxWordCount);
+    const shuffled = [...curDiffWords].sort(() => Math.random() - 0.5);
+    curWords = shuffled.slice(0, wordsCount);
+    document.getElementsByClassName("total-count")[0].innerHTML = wordsCount;
+    document.getElementsByClassName("total-count")[1].innerHTML = wordsCount;
+}
+
 function onGameEnd() {
     mainScreen.classList.remove("active");
     resultScreen.classList.add("active");
@@ -163,6 +170,7 @@ function onGameEnd() {
 function onRestartButtonClick() {
     resultScreen.classList.remove("active");
     startScreen.classList.add("active");
+    setCurWords();
 }
 
 function createWord() {
