@@ -61,52 +61,8 @@ class Main {
     difficultyChanged(diff) {
         const selectedDifficulty = diff;
         const curDiffWords = this.words[selectedDifficulty];
-        this.wordsList.innerHTML = "";
-
-        const table = document.createElement("table");
-        const thead = document.createElement("thead");
-        const tbody = document.createElement("tbody");
-
-        const headerRow = document.createElement("tr");
-
-        const maxKanjiLength = Math.max(...curDiffWords.map(f => f.kanji.length));
-        const thKanjiWidth = ((maxKanjiLength + 1) * 20) + 'vh';
-
-        const maxJpLength = Math.max(...curDiffWords.map(f => f.jp.length));
-        const thJpWidth = ((maxJpLength + 1) * 20) + 'vh';
-
-        const th1 = document.createElement("th");
-        th1.textContent = "한자";
-        th1.width = thKanjiWidth;
-        headerRow.appendChild(th1);
-        const th2 = document.createElement("th");
-        th2.textContent = "발음";
-        th2.width = thJpWidth;
-        headerRow.appendChild(th2);
-        const th3 = document.createElement("th");
-        th3.textContent = "뜻";
-        headerRow.appendChild(th3);
-
-        thead.appendChild(headerRow);
-
-        // 데이터 행 생성 로직
-        curDiffWords?.forEach(element => {
-            const tr = document.createElement("tr");
-
-            // 각 셀 생성 (구조적 반복)
-            const data = [element.kanji, element.jp, element.kr.join(", ")];
-            data.forEach(text => {
-                const td = document.createElement("td");
-                td.textContent = text;
-                tr.appendChild(td);
-            });
-
-            tbody.appendChild(tr);
-        });
-
-        table.appendChild(thead);
-        table.appendChild(tbody);
-        this.wordsList.appendChild(table);
+        
+        createListHeader(this.wordsList, curDiffWords);
 
         wordsCount = Math.min(curDiffWords.length, maxWordCount);
         const shuffled = [...curDiffWords].sort(() => Math.random() - 0.5);
@@ -201,63 +157,7 @@ function onGameEnd() {
     let finalScore = finalCorrect / wordsCount * 100;
     document.getElementById("total-score").innerText = `난이도: ${difficulty.value}, 속도: ${document.getElementById(duration).innerHTML}, 점수: ${finalScore}(${finalCorrect} / ${wordsCount})`;
     
-    resultWordsList.innerHTML = "";
-    const table = document.createElement("table");
-    const thead = document.createElement("thead");
-    const tbody = document.createElement("tbody");
-
-    const headerRow = document.createElement("tr");
-
-    const maxKanjiLength = Math.max(...resultWords.map(f => f.kanji.length));
-    const thKanjiWidth = ((maxKanjiLength + 1) * 20) + 'vh';
-    
-    const maxJpLength = Math.max(...resultWords.map(f => f.jp.length));
-    const thJpWidth = ((maxJpLength + 1) * 20) + 'vh';
-
-    const th1 = document.createElement("th");
-    th1.textContent = "한자";
-    th1.width = thKanjiWidth;
-    headerRow.appendChild(th1);
-    const th2 = document.createElement("th");
-    th2.textContent = "발음";
-    th2.width = thJpWidth;
-    headerRow.appendChild(th2);
-    const th3 = document.createElement("th");
-    th3.textContent = "뜻";
-    headerRow.appendChild(th3);
-
-    thead.appendChild(headerRow);
-
-    // 데이터 행 생성 로직
-    resultWords?.forEach(element => {
-        const tr = document.createElement("tr");
-
-        // 각 셀 생성 (구조적 반복)
-        const data = [element.kanji, element.jp, element.kr.join(", ")];
-        data.forEach(text => {
-            const td = document.createElement("td");
-            td.textContent = text;
-            if (element.isKr != undefined) {
-                if (element.kanji == text) {
-                    td.style.color = 'green';
-                }
-                else if ((element.isKr && text == element.kr.join(", ")) // 뜻으로 맞춘 경우
-                    || (!element.isKr && text == element.jp)) { // 발음으로 맞춘 경우
-                    td.style.color = 'green';
-                }
-            }
-            else if (element.kanji == text) {
-                td.style.color = 'red';
-            }
-            tr.appendChild(td);
-        });
-
-        tbody.appendChild(tr);
-    });
-
-    table.appendChild(thead);
-    table.appendChild(tbody);
-    resultWordsList.appendChild(table);
+    createListHeader(resultWordsList, resultWords);
 }
 
 function onRestartButtonClick() {
@@ -295,6 +195,7 @@ function createWord() {
             let score = parseInt(wrongCount.innerHTML);
             wrongCount.innerHTML = score + 1;
             let word = originWord;
+            word.isRemoved = true;
             resultWords.push(word);
             removedWordsCount++;
             if (removedWordsCount == curWords.length) {
@@ -302,6 +203,78 @@ function createWord() {
             }
         }
     }, duration * 1000);
+}
+
+function createListHeader(wordList, words) {
+    wordList.innerHTML = "";
+    const table = document.createElement("table");
+    const thead = document.createElement("thead");
+    const tbody = document.createElement("tbody");
+
+    const headerRow = document.createElement("tr");
+
+    const maxKanjiLength = Math.max(...words.map(f => f.kanji.length));
+    const thKanjiWidth = ((maxKanjiLength + 1) * 20) + 'vh';
+
+    const maxJpLength = Math.max(...words.map(f => f.jp.length));
+    const thJpWidth = ((maxJpLength + 1) * 20) + 'vh';
+
+    const th1 = document.createElement("th");
+    th1.textContent = "한자";
+    th1.width = thKanjiWidth;
+    headerRow.appendChild(th1);
+    const th2 = document.createElement("th");
+    th2.textContent = "발음";
+    th2.width = thJpWidth;
+    headerRow.appendChild(th2);
+    const th3 = document.createElement("th");
+    th3.textContent = "뜻";
+    headerRow.appendChild(th3);
+
+    thead.appendChild(headerRow);
+
+    // words?.forEach(element => {
+    //     const tr = document.createElement("tr");
+
+    //     const data = [element.kanji, element.jp, element.kr.join(", ")];
+    //     data.forEach(text => {
+    //         const td = document.createElement("td");
+    //         td.textContent = text;
+            
+    //         if (element.isKr != undefined) {
+    //             if (element.kanji == text) {
+    //                 td.style.color = 'green';
+    //             }
+    //             else if ((element.isKr && text == element.kr.join(", ")) // 뜻으로 맞춘 경우
+    //                 || (!element.isKr && text == element.jp)) { // 발음으로 맞춘 경우
+    //                 td.style.color = 'green';
+    //             }
+    //         }
+    //         else if (element.kanji == text) {
+    //             td.style.color = 'red';
+    //         }
+    //         tr.appendChild(td);
+    //     });
+
+    //     tbody.appendChild(tr);
+    // });
+
+    words?.forEach(element => {
+        const tr = document.createElement("tr");
+
+        const data = [element.kanji, element.jp, element.kr.join(", ")];
+        data.forEach(text => {
+            const td = document.createElement("td");
+            td.textContent = text;
+            tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+    });
+
+    table.appendChild(thead);
+    table.appendChild(tbody);
+    wordList.appendChild(table);
 }
 
 loadWords();
