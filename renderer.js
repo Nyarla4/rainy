@@ -101,6 +101,13 @@ class Main {
                     isKr = true;
                     return true;
                 }
+                // ④ 선택형 대괄호 처리
+                const choicePattern = trimedK.replace(/([^\[\s]+)\[([^\]]+)\]/g, "($1|$2)");
+                const regex = new RegExp(`^${choicePattern}$`);
+                if (regex.test(userInput)) {
+                    isKr = true;
+                    return true;
+                }
                 return false;
             });
 
