@@ -63,7 +63,7 @@ class Main {
         const selectedDifficulty = diff;
         curDiffWords = this.words[selectedDifficulty];
         
-        createListHeader(this.wordsList, curDiffWords);
+        createList(this.wordsList, curDiffWords);
         setCurWords();
     }
 
@@ -90,24 +90,24 @@ class Main {
                 const targetWord = trimedK.includes(':') ? trimedK.replace(/^.*:\s*/, "") : trimedK;
 
                 // 1. 완전 일치 (예: "(본궤도에서) 벗어나다")
-                if (trimedK === userInput) {
+                if (targetWord === userInput) {
                     isKr = true;
                     return true;
                 }
                 // 2. 괄호만 제거 (예: "본궤도에서 벗어나다")
-                const flatWord = trimedK.replace(/\(|\)/g, "");
+                const flatWord = targetWord.replace(/\(|\)/g, "");
                 if (flatWord === userInput) {
                     isKr = true;
                     return true;
                 }
                 // 3. 괄호와 그 안의 내용까지 제거 (예: "벗어나다")
-                const coreWord = trimedK.replace(/\([^)]*\)/g, "").trim();
+                const coreWord = targetWord.replace(/\([^)]*\)/g, "").trim();
                 if (coreWord === userInput) {
                     isKr = true;
                     return true;
                 }
                 // 4. 선택형 대괄호 처리
-                const choicePattern = trimedK.replace(/([^\[\s]+)\[([^\]]+)\]/g, "($1|$2)");
+                const choicePattern = targetWord.replace(/([^\[\s]+)\[([^\]]+)\]/g, "($1|$2)");
                 const regex = new RegExp(`^${choicePattern}$`);
                 if (regex.test(userInput)) {
                     isKr = true;
@@ -173,7 +173,7 @@ function onGameEnd() {
     let finalScore = finalCorrect / wordsCount * 100;
     document.getElementById("total-score").innerText = `난이도: ${difficulty.value}, 속도: ${document.getElementById(duration).innerHTML}, 점수: ${finalScore}(${finalCorrect} / ${wordsCount})`;
     
-    createListHeader(resultWordsList, resultWords);
+    createList(resultWordsList, resultWords);
 }
 
 function onRestartButtonClick() {
@@ -222,7 +222,7 @@ function createWord() {
     }, duration * 1000);
 }
 
-function createListHeader(wordList, words) {
+function createList(wordList, words) {
     wordList.innerHTML = "";
     const table = document.createElement("table");
     const thead = document.createElement("thead");
@@ -259,16 +259,14 @@ function createListHeader(wordList, words) {
         const data = [element.kanji, element.jp, element.kr.join(", ")];
         data.forEach(text => {
             const td = document.createElement("td");
-            td.textContent = text;
             td.height = '50vh';
-
             if (element.isKr != undefined || element.isRemoved != undefined) {
                 if (element.isKr != undefined) {
                     if (element.kanji == text) {
                         td.style.color = 'green';
                     }
                     else if ((element.isKr && text == element.kr.join(", ")) // 뜻으로 맞춘 경우
-                        || (!element.isKr && text == element.jp)) { // 발음으로 맞춘 경우
+                    || (!element.isKr && text == element.jp)) { // 발음으로 맞춘 경우
                         td.style.color = 'green';
                     }
                 }
@@ -276,6 +274,24 @@ function createListHeader(wordList, words) {
                     td.style.color = 'red';
                 }
             }
+            if (text == element.kr.join(", ")) {// 뜻에 대해서만 적용
+                let editedKrList = [];
+                const explain = "";
+                element.kr.forEach(kr => {
+                    let editedKr = kr;
+                    if(kr.includes(":")){
+                        if(explain == ""){
+                            explain = kr.split(":")[0];
+                        }
+                        else if(explain == kr.split(":")[0]){
+                            editedKr = kr.split(":")[1];
+                        }
+                    }
+                    editedKrList.push(editedKr);
+                });
+                text = editedKrList.join(", ");
+            }
+            td.textContent = text;
 
             tr.appendChild(td);
         });
