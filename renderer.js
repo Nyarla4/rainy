@@ -60,6 +60,7 @@ class Main {
 
     difficultyChanged(diff) {
         const selectedDifficulty = diff;
+        const curDiffWords = this.words[selectedDifficulty];
         this.wordsList.innerHTML = "";
 
         const table = document.createElement("table");
@@ -67,15 +68,29 @@ class Main {
         const tbody = document.createElement("tbody");
 
         const headerRow = document.createElement("tr");
-        ["한자", "발음", "뜻"].forEach(text => {
-            const th = document.createElement("th");
-            th.textContent = text;
-            headerRow.appendChild(th);
-        });
+
+        const maxKanjiLength = Math.max(...curDiffWords.map(f => f.kanji.length));
+        const thKanjiWidth = ((maxKanjiLength + 1) * 20) + 'vh';
+
+        const maxJpLength = Math.max(...curDiffWords.map(f => f.jp.length));
+        const thJpWidth = ((maxJpLength + 1) * 20) + 'vh';
+
+        const th1 = document.createElement("th");
+        th1.textContent = "한자";
+        th1.width = thKanjiWidth;
+        headerRow.appendChild(th1);
+        const th2 = document.createElement("th");
+        th2.textContent = "발음";
+        th2.width = thJpWidth;
+        headerRow.appendChild(th2);
+        const th3 = document.createElement("th");
+        th3.textContent = "뜻";
+        headerRow.appendChild(th3);
+
         thead.appendChild(headerRow);
 
         // 데이터 행 생성 로직
-        this.words[selectedDifficulty]?.forEach(element => {
+        curDiffWords?.forEach(element => {
             const tr = document.createElement("tr");
 
             // 각 셀 생성 (구조적 반복)
@@ -93,8 +108,8 @@ class Main {
         table.appendChild(tbody);
         this.wordsList.appendChild(table);
 
-        wordsCount = Math.min(this.words[selectedDifficulty].length, maxWordCount);
-        const shuffled = [...this.words[selectedDifficulty]].sort(() => Math.random() - 0.5);
+        wordsCount = Math.min(curDiffWords.length, maxWordCount);
+        const shuffled = [...curDiffWords].sort(() => Math.random() - 0.5);
         curWords = shuffled.slice(0, wordsCount);
         document.getElementsByClassName("total-count")[0].innerHTML = wordsCount;
         document.getElementsByClassName("total-count")[1].innerHTML = wordsCount;
@@ -191,24 +206,26 @@ function onGameEnd() {
     const thead = document.createElement("thead");
     const tbody = document.createElement("tbody");
 
+    const headerRow = document.createElement("tr");
+
     const maxKanjiLength = Math.max(...resultWords.map(f => f.kanji.length));
     const thKanjiWidth = ((maxKanjiLength + 1) * 20) + 'vh';
     
     const maxJpLength = Math.max(...resultWords.map(f => f.jp.length));
     const thJpWidth = ((maxJpLength + 1) * 20) + 'vh';
 
-    const headerRow = document.createElement("tr");
-    ["한자", "발음", "뜻"].forEach(text => {
-        const th = document.createElement("th");
-        th.textContent = text;
-        if (text == "한자") {
-            th.width = thKanjiWidth;
-        }
-        else if (text == "발음") {
-            th.width = thJpWidth;
-        }
-        headerRow.appendChild(th);
-    });
+    const th1 = document.createElement("th");
+    th1.textContent = "한자";
+    th1.width = thKanjiWidth;
+    headerRow.appendChild(th1);
+    const th2 = document.createElement("th");
+    th2.textContent = "발음";
+    th2.width = thJpWidth;
+    headerRow.appendChild(th2);
+    const th3 = document.createElement("th");
+    th3.textContent = "뜻";
+    headerRow.appendChild(th3);
+
     thead.appendChild(headerRow);
 
     // 데이터 행 생성 로직
