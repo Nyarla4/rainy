@@ -217,7 +217,7 @@ function createListHeader(wordList, words) {
     const thKanjiWidth = ((maxKanjiLength + 1) * 20) + 'vh';
 
     const maxJpLength = Math.max(...words.map(f => f.jp.length));
-    const thJpWidth = ((maxJpLength + 1) * 20) + 'vh';
+    const thJpWidth = ((maxJpLength + 1) * 10) + 'vh';
 
     const th1 = document.createElement("th");
     th1.textContent = "한자";
@@ -235,11 +235,11 @@ function createListHeader(wordList, words) {
 
     words?.forEach(element => {
         const tr = document.createElement("tr");
-        tr.height = '50vh';
         const data = [element.kanji, element.jp, element.kr.join(", ")];
         data.forEach(text => {
             const td = document.createElement("td");
             td.textContent = text;
+            td.height = '50vh';
 
             if (element.isKr != undefined || element.isRemoved != undefined) {
                 if (element.isKr != undefined) {
