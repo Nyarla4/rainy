@@ -14,7 +14,6 @@
 
 .falling-word {
     position: absolute;
-    font-size: 20px;
     white-space: nowrap;
     user-select: none;
     animation: fall linear forwards;
@@ -42,8 +41,4 @@ td {
 
 #result-words td {
     font-size: 2vh;
-}
-
-#result-words * {
-    min-height: 4vh;
 }

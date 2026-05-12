@@ -235,7 +235,7 @@ function createListHeader(wordList, words) {
 
     words?.forEach(element => {
         const tr = document.createElement("tr");
-
+        tr.height = '50vh';
         const data = [element.kanji, element.jp, element.kr.join(", ")];
         data.forEach(text => {
             const td = document.createElement("td");
