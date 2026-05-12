@@ -224,6 +224,9 @@ function createListHeader(wordList, words) {
     const maxJpLength = Math.max(...words.map(f => f.jp.length));
     const thJpWidth = ((maxJpLength + 1) * 10) + 'vh';
 
+    const maxKrLength = Math.max(...curDiffWords.map(f=>f.kr.join().length));
+    const thKrWidth = ((maxKrLength / 2 + 10) * 10) + 'vh';
+
     const th1 = document.createElement("th");
     th1.textContent = "한자";
     th1.width = thKanjiWidth;
@@ -234,6 +237,7 @@ function createListHeader(wordList, words) {
     headerRow.appendChild(th2);
     const th3 = document.createElement("th");
     th3.textContent = "뜻";
+    th3.width = thKrWidth;
     headerRow.appendChild(th3);
 
     thead.appendChild(headerRow);
