@@ -233,32 +233,6 @@ function createListHeader(wordList, words) {
 
     thead.appendChild(headerRow);
 
-    // words?.forEach(element => {
-    //     const tr = document.createElement("tr");
-
-    //     const data = [element.kanji, element.jp, element.kr.join(", ")];
-    //     data.forEach(text => {
-    //         const td = document.createElement("td");
-    //         td.textContent = text;
-            
-    //         if (element.isKr != undefined) {
-    //             if (element.kanji == text) {
-    //                 td.style.color = 'green';
-    //             }
-    //             else if ((element.isKr && text == element.kr.join(", ")) // 뜻으로 맞춘 경우
-    //                 || (!element.isKr && text == element.jp)) { // 발음으로 맞춘 경우
-    //                 td.style.color = 'green';
-    //             }
-    //         }
-    //         else if (element.kanji == text) {
-    //             td.style.color = 'red';
-    //         }
-    //         tr.appendChild(td);
-    //     });
-
-    //     tbody.appendChild(tr);
-    // });
-
     words?.forEach(element => {
         const tr = document.createElement("tr");
 
@@ -266,6 +240,22 @@ function createListHeader(wordList, words) {
         data.forEach(text => {
             const td = document.createElement("td");
             td.textContent = text;
+
+            if (element.isKr != undefined || element.isRemoved != undefined) {
+                if (element.isKr != undefined) {
+                    if (element.kanji == text) {
+                        td.style.color = 'green';
+                    }
+                    else if ((element.isKr && text == element.kr.join(", ")) // 뜻으로 맞춘 경우
+                        || (!element.isKr && text == element.jp)) { // 발음으로 맞춘 경우
+                        td.style.color = 'green';
+                    }
+                }
+                else if (element.kanji == text) {
+                    td.style.color = 'red';
+                }
+            }
+
             tr.appendChild(td);
         });
 
