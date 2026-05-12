@@ -84,24 +84,29 @@ class Main {
             // 1. 한국어 뜻 배열(kr) 중 하나라도 일치하는지 확인
             const matchKr = f.kr.some(k => {
                 const trimedK = k.trim();
-                // ① 완전 일치 (예: "(본궤도에서) 벗어나다")
+
+                // 0. 콜론(:) 앞부분(설명문) 제거 로직 추가
+                // "마음속 깊이 느끼는 모양:정말" -> "정말"
+                const targetWord = trimedK.includes(':') ? trimedK.replace(/^.*:\s*/, "") : trimedK;
+
+                // 1. 완전 일치 (예: "(본궤도에서) 벗어나다")
                 if (trimedK === userInput) {
                     isKr = true;
                     return true;
                 }
-                // ② 괄호만 제거 (예: "본궤도에서 벗어나다")
+                // 2. 괄호만 제거 (예: "본궤도에서 벗어나다")
                 const flatWord = trimedK.replace(/\(|\)/g, "");
                 if (flatWord === userInput) {
                     isKr = true;
                     return true;
                 }
-                // ③ 괄호와 그 안의 내용까지 제거 (예: "벗어나다")
+                // 3. 괄호와 그 안의 내용까지 제거 (예: "벗어나다")
                 const coreWord = trimedK.replace(/\([^)]*\)/g, "").trim();
                 if (coreWord === userInput) {
                     isKr = true;
                     return true;
                 }
-                // ④ 선택형 대괄호 처리
+                // 4. 선택형 대괄호 처리
                 const choicePattern = trimedK.replace(/([^\[\s]+)\[([^\]]+)\]/g, "($1|$2)");
                 const regex = new RegExp(`^${choicePattern}$`);
                 if (regex.test(userInput)) {
