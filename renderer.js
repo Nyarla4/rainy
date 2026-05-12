@@ -276,7 +276,7 @@ function createList(wordList, words) {
             }
             if (text == element.kr.join(", ")) {// 뜻에 대해서만 적용
                 let editedKrList = [];
-                const explain = "";
+                let explain = "";
                 element.kr.forEach(kr => {
                     let editedKr = kr;
                     if(kr.includes(":")){
