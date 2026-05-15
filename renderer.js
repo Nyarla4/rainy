@@ -119,7 +119,7 @@ class Main {
             if (matchKr) return true;
 
             // 2. 일본어 발음(jp) 일치 확인
-            return f.jp === userInput;
+            return f.jp.trim() === userInput;
         });
         if (inputWord != undefined) {
             let targetElement = document.getElementById(inputWord.kanji);
